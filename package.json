@@ -1,0 +1,26 @@
+{
+  "name": "paw-and-ritual-project",
+  "version": "1.0.0",
+  "description": "PAW & RITUAL — Luxury Pet Grooming & Emergency Kits Full-Stack E-Commerce Platform",
+  "scripts": {
+    "setup:backend": "cd backend && npm install && npm run db:setup",
+    "setup:frontend": "cd frontend && npm install",
+    "setup": "npm run setup:backend && npm run setup:frontend",
+    "start:backend": "cd backend && npm run dev",
+    "start:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "paw-and-ritual",
+    "pet-grooming",
+    "emergency-kits",
+    "luxury-ecommerce",
+    "react",
+    "express",
+    "prisma",
+    "mysql",
+    "razorpay"
+  ],
+  "author": "Paw & Ritual Team",
+  "license": "ISC"
+}

@@ -1,0 +1,286 @@
+-- PAW & RITUAL LUXURY PET GROOMING & EMERGENCY KITS
+-- MySQL Relational Schema Dump (MySQL 8.0+)
+-- Database: paw_and_ritual
+
+CREATE DATABASE IF NOT EXISTS `paw_and_ritual` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `paw_and_ritual`;
+
+-- 1. Users Table
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `email` VARCHAR(191) NOT NULL UNIQUE,
+  `passwordHash` VARCHAR(255) NOT NULL,
+  `firstName` VARCHAR(100) NOT NULL,
+  `lastName` VARCHAR(100) NULL,
+  `phone` VARCHAR(30) NULL,
+  `role` VARCHAR(20) NOT NULL DEFAULT 'CUSTOMER',
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 2. Addresses Table
+CREATE TABLE IF NOT EXISTS `addresses` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `userId` VARCHAR(191) NOT NULL,
+  `fullName` VARCHAR(150) NOT NULL,
+  `phone` VARCHAR(30) NOT NULL,
+  `streetAddress` VARCHAR(255) NOT NULL,
+  `apartment` VARCHAR(100) NULL,
+  `city` VARCHAR(100) NOT NULL,
+  `state` VARCHAR(100) NOT NULL,
+  `postalCode` VARCHAR(20) NOT NULL,
+  `country` VARCHAR(50) NOT NULL DEFAULT 'India',
+  `isDefault` BOOLEAN NOT NULL DEFAULT FALSE,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_addresses_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 3. Categories Table
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `name` VARCHAR(100) NOT NULL UNIQUE,
+  `slug` VARCHAR(100) NOT NULL UNIQUE,
+  `description` TEXT NULL,
+  `image` VARCHAR(500) NULL,
+  `bannerImage` VARCHAR(500) NULL,
+  `featured` BOOLEAN NOT NULL DEFAULT FALSE,
+  `sortOrder` INT NOT NULL DEFAULT 0,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 4. Products Table
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `name` VARCHAR(200) NOT NULL,
+  `slug` VARCHAR(200) NOT NULL UNIQUE,
+  `sku` VARCHAR(50) NOT NULL UNIQUE,
+  `shortDescription` VARCHAR(500) NOT NULL,
+  `fullDescription` TEXT NOT NULL,
+  `price` DOUBLE NOT NULL,
+  `compareAtPrice` DOUBLE NULL,
+  `stock` INT NOT NULL DEFAULT 50,
+  `categoryId` VARCHAR(191) NOT NULL,
+  `isFeatured` BOOLEAN NOT NULL DEFAULT FALSE,
+  `isBestseller` BOOLEAN NOT NULL DEFAULT FALSE,
+  `isEmergencyKit` BOOLEAN NOT NULL DEFAULT FALSE,
+  `isActive` BOOLEAN NOT NULL DEFAULT TRUE,
+  `rating` DOUBLE NOT NULL DEFAULT 5.0,
+  `reviewCount` INT NOT NULL DEFAULT 0,
+  `ingredients` TEXT NULL,
+  `directions` TEXT NULL,
+  `safetyInfo` TEXT NULL,
+  `specifications` TEXT NULL,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_products_category` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 5. Product Images Table
+CREATE TABLE IF NOT EXISTS `product_images` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `productId` VARCHAR(191) NOT NULL,
+  `url` VARCHAR(500) NOT NULL,
+  `altText` VARCHAR(255) NULL,
+  `isPrimary` BOOLEAN NOT NULL DEFAULT FALSE,
+  `sortOrder` INT NOT NULL DEFAULT 0,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_product_images_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 6. Product Variants Table
+CREATE TABLE IF NOT EXISTS `product_variants` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `productId` VARCHAR(191) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `value` VARCHAR(50) NOT NULL,
+  `priceAdjustment` DOUBLE NOT NULL DEFAULT 0.0,
+  `stock` INT NOT NULL DEFAULT 25,
+  `sku` VARCHAR(50) NULL,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_product_variants_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 7. Inventory Table
+CREATE TABLE IF NOT EXISTS `inventory` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `productId` VARCHAR(191) NOT NULL,
+  `quantity` INT NOT NULL,
+  `type` VARCHAR(50) NOT NULL DEFAULT 'INITIAL',
+  `notes` VARCHAR(255) NULL,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_inventory_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 8. Carts Table
+CREATE TABLE IF NOT EXISTS `carts` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `userId` VARCHAR(191) NULL UNIQUE,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_carts_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 9. Cart Items Table
+CREATE TABLE IF NOT EXISTS `cart_items` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `cartId` VARCHAR(191) NOT NULL,
+  `productId` VARCHAR(191) NOT NULL,
+  `variantId` VARCHAR(191) NULL,
+  `quantity` INT NOT NULL DEFAULT 1,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_cart_items_cart` FOREIGN KEY (`cartId`) REFERENCES `carts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_cart_items_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_cart_items_variant` FOREIGN KEY (`variantId`) REFERENCES `product_variants` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 10. Wishlists Table
+CREATE TABLE IF NOT EXISTS `wishlists` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `userId` VARCHAR(191) NOT NULL UNIQUE,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_wishlists_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 11. Wishlist Items Table
+CREATE TABLE IF NOT EXISTS `wishlist_items` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `wishlistId` VARCHAR(191) NOT NULL,
+  `productId` VARCHAR(191) NOT NULL,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  UNIQUE KEY `uq_wishlist_product` (`wishlistId`, `productId`),
+  CONSTRAINT `fk_wishlist_items_wishlist` FOREIGN KEY (`wishlistId`) REFERENCES `wishlists` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_wishlist_items_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 12. Orders Table
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `orderNumber` VARCHAR(50) NOT NULL UNIQUE,
+  `userId` VARCHAR(191) NULL,
+  `customerName` VARCHAR(150) NOT NULL,
+  `customerEmail` VARCHAR(191) NOT NULL,
+  `customerPhone` VARCHAR(30) NOT NULL,
+  `status` VARCHAR(30) NOT NULL DEFAULT 'PENDING',
+  `paymentMethod` VARCHAR(30) NOT NULL DEFAULT 'COD',
+  `paymentStatus` VARCHAR(30) NOT NULL DEFAULT 'PENDING',
+  `subtotal` DOUBLE NOT NULL,
+  `shippingFee` DOUBLE NOT NULL DEFAULT 0.0,
+  `discountAmount` DOUBLE NOT NULL DEFAULT 0.0,
+  `totalAmount` DOUBLE NOT NULL,
+  `couponCode` VARCHAR(50) NULL,
+  `trackingNumber` VARCHAR(100) NULL,
+  `notes` TEXT NULL,
+  `shippingAddressSnapshot` TEXT NOT NULL,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_orders_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 13. Order Items Table
+CREATE TABLE IF NOT EXISTS `order_items` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `orderId` VARCHAR(191) NOT NULL,
+  `productId` VARCHAR(191) NOT NULL,
+  `productName` VARCHAR(200) NOT NULL,
+  `productSku` VARCHAR(50) NOT NULL,
+  `price` DOUBLE NOT NULL,
+  `quantity` INT NOT NULL,
+  `total` DOUBLE NOT NULL,
+  `variantInfo` VARCHAR(100) NULL,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_order_items_order` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_order_items_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 14. Payments Table
+CREATE TABLE IF NOT EXISTS `payments` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `orderId` VARCHAR(191) NOT NULL UNIQUE,
+  `paymentMethod` VARCHAR(30) NOT NULL,
+  `razorpayOrderId` VARCHAR(100) NULL,
+  `razorpayPaymentId` VARCHAR(100) NULL,
+  `razorpaySignature` VARCHAR(255) NULL,
+  `amount` DOUBLE NOT NULL,
+  `currency` VARCHAR(10) NOT NULL DEFAULT 'INR',
+  `status` VARCHAR(30) NOT NULL DEFAULT 'PENDING',
+  `rawResponse` TEXT NULL,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_payments_order` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 15. Coupons Table
+CREATE TABLE IF NOT EXISTS `coupons` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `code` VARCHAR(50) NOT NULL UNIQUE,
+  `discountType` VARCHAR(20) NOT NULL DEFAULT 'PERCENTAGE',
+  `discountValue` DOUBLE NOT NULL,
+  `minOrderValue` DOUBLE NOT NULL DEFAULT 0.0,
+  `maxDiscount` DOUBLE NULL,
+  `validUntil` DATETIME(3) NULL,
+  `usageLimit` INT NOT NULL DEFAULT 100,
+  `usedCount` INT NOT NULL DEFAULT 0,
+  `isActive` BOOLEAN NOT NULL DEFAULT TRUE,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 16. Reviews Table
+CREATE TABLE IF NOT EXISTS `reviews` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `productId` VARCHAR(191) NOT NULL,
+  `userId` VARCHAR(191) NULL,
+  `authorName` VARCHAR(100) NOT NULL,
+  `petName` VARCHAR(100) NULL,
+  `petBreed` VARCHAR(100) NULL,
+  `rating` INT NOT NULL DEFAULT 5,
+  `title` VARCHAR(200) NOT NULL,
+  `comment` TEXT NOT NULL,
+  `isVerifiedPurchase` BOOLEAN NOT NULL DEFAULT TRUE,
+  `isApproved` BOOLEAN NOT NULL DEFAULT TRUE,
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  CONSTRAINT `fk_reviews_product` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_reviews_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 17. Newsletter Subscribers Table
+CREATE TABLE IF NOT EXISTS `newsletter_subscribers` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `email` VARCHAR(191) NOT NULL UNIQUE,
+  `isActive` BOOLEAN NOT NULL DEFAULT TRUE,
+  `source` VARCHAR(50) NOT NULL DEFAULT 'homepage',
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 18. Contact Messages Table
+CREATE TABLE IF NOT EXISTS `contact_messages` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `name` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(191) NOT NULL,
+  `phone` VARCHAR(30) NULL,
+  `subject` VARCHAR(200) NOT NULL,
+  `message` TEXT NOT NULL,
+  `isRead` BOOLEAN NOT NULL DEFAULT FALSE,
+  `status` VARCHAR(20) NOT NULL DEFAULT 'NEW',
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 19. Blog Posts Table
+CREATE TABLE IF NOT EXISTS `blog_posts` (
+  `id` VARCHAR(191) NOT NULL PRIMARY KEY,
+  `title` VARCHAR(255) NOT NULL,
+  `slug` VARCHAR(255) NOT NULL UNIQUE,
+  `excerpt` VARCHAR(500) NOT NULL,
+  `content` TEXT NOT NULL,
+  `coverImage` VARCHAR(500) NOT NULL,
+  `author` VARCHAR(100) NOT NULL DEFAULT 'Paw & Ritual Editorial Team',
+  `category` VARCHAR(50) NOT NULL DEFAULT 'Grooming Care',
+  `readTime` VARCHAR(30) NOT NULL DEFAULT '4 min read',
+  `isPublished` BOOLEAN NOT NULL DEFAULT TRUE,
+  `publishedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
