@@ -1,7 +1,7 @@
 {
-  "name": "paw-and-ritual-project",
+  "name": "petbloom-project",
   "version": "1.0.0",
-  "description": "PAW & RITUAL — Luxury Pet Grooming & Emergency Kits Full-Stack E-Commerce Platform",
+  "description": "PetBloom — Luxury Pet Grooming & Emergency Kits Full-Stack E-Commerce Platform",
   "scripts": {
     "setup:backend": "cd backend && npm install && npm run db:setup",
     "setup:frontend": "cd frontend && npm install",
@@ -11,7 +11,7 @@
     "build:frontend": "cd frontend && npm run build"
   },
   "keywords": [
-    "paw-and-ritual",
+    "petbloom",
     "pet-grooming",
     "emergency-kits",
     "luxury-ecommerce",
@@ -21,6 +21,6 @@
     "mysql",
     "razorpay"
   ],
-  "author": "Paw & Ritual Team",
+  "author": "workwithkumaraswamy@gmail.com",
   "license": "ISC"
 }

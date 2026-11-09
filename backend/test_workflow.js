@@ -2,7 +2,7 @@ const app = require('./src/app');
 const http = require('http');
 
 async function runTests() {
-  console.log('--- Commencing Paw & Ritual End-to-End Workflow Verification ---');
+  console.log('--- Commencing PetBloom End-to-End Workflow Verification ---');
 
   const server = http.createServer(app);
   await new Promise((resolve) => server.listen(0, resolve));
@@ -27,7 +27,7 @@ async function runTests() {
     // 1. Health check
     const health = await request('/health');
     console.log('✔ Health Check:', health.data.brand, health.data.status);
-    if (health.status !== 200) throw new Error('Health check failed');
+    if (health.status !== 200 || health.data.brand !== 'PetBloom') throw new Error('Health check failed');
 
     // 2. Fetch products
     const products = await request('/products');
@@ -53,7 +53,7 @@ async function runTests() {
     // 6. Admin Login
     const adminLogin = await request('/auth/login', {
       method: 'POST',
-      body: { email: 'admin@pawandritual.com', password: 'Admin@PawRitual2024' },
+      body: { email: 'admin@petbloom.com', password: 'Admin@PetBloom2024' },
     });
     console.log('✔ Admin Authentication:', adminLogin.data.user.firstName, 'Role:', adminLogin.data.user.role);
     const adminToken = adminLogin.data.token;
@@ -72,7 +72,7 @@ async function runTests() {
     // 8. Apply Coupon
     const coupon = await request('/coupons/apply', {
       method: 'POST',
-      body: { code: 'RITUAL10', subtotal: 2000 },
+      body: { code: 'BLOOM10', subtotal: 2000 },
     });
     console.log('✔ Promotional Coupon Applied:', coupon.data.coupon.code, 'Discount Amount:', coupon.data.coupon.discountAmount);
 
@@ -101,7 +101,7 @@ async function runTests() {
           },
         ],
         paymentMethod: 'RAZORPAY',
-        couponCode: 'RITUAL10',
+        couponCode: 'BLOOM10',
       },
     });
     console.log('✔ Order Placement Created:', newOrder.data.order.orderNumber, 'Total Amount:', newOrder.data.order.totalAmount);

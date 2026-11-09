@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('--- Starting Paw & Ritual Database Seed ---');
+  console.log('--- Starting PetBloom Database Seed ---');
 
   // Clear existing data in reverse dependency order
   await prisma.review.deleteMany({});
@@ -29,13 +29,25 @@ async function main() {
 
   // 1. Seed Users
   const salt = await bcrypt.genSalt(10);
-  const adminPasswordHash = await bcrypt.hash('Admin@PawRitual2024', salt);
+  const adminPasswordHash = await bcrypt.hash('Admin@PetBloom2024', salt);
+  const legacyAdminPasswordHash = await bcrypt.hash('Admin@PawRitual2024', salt);
   const customerPasswordHash = await bcrypt.hash('Password@123', salt);
 
   const admin = await prisma.user.create({
     data: {
-      email: 'admin@pawandritual.com',
+      email: 'admin@petbloom.com',
       passwordHash: adminPasswordHash,
+      firstName: 'Alastair',
+      lastName: 'Montague',
+      phone: '+91 98765 43210',
+      role: 'ADMIN',
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      email: 'admin@pawandritual.com',
+      passwordHash: legacyAdminPasswordHash,
       firstName: 'Alastair',
       lastName: 'Montague',
       phone: '+91 98765 43210',
@@ -302,7 +314,7 @@ async function main() {
       slug: 'complete-canine-emergency-grooming-kit',
       sku: 'PR-EK-006',
       shortDescription: 'The ultimate veterinary-inspired emergency grooming kit in an olive-green roll case for absolute peace of mind.',
-      fullDescription: 'Every pet parent dreads the unexpected: a sudden nail split during a brisk walk, an accidental nick near the quick, burrs matted painfully close to the skin, or cracked bleeding pads on summer concrete. The Paw & Ritual Complete Canine Emergency Grooming Kit is your calm, composed response. Housed in a water-resistant olive-green roll case with brushed champagne hardware, this collection brings together professional-grade surgical tools and soothing botanical treatments with a waterproof Emergency Action protocol card.',
+      fullDescription: 'Every pet parent dreads the unexpected: a sudden nail split during a brisk walk, an accidental nick near the quick, burrs matted painfully close to the skin, or cracked bleeding pads on summer concrete. The PetBloom Complete Canine Emergency Grooming Kit is your calm, composed response. Housed in a water-resistant olive-green roll case with brushed champagne hardware, this collection brings together professional-grade surgical tools and soothing botanical treatments with a waterproof Emergency Action protocol card.',
       price: 3850,
       compareAtPrice: 4800,
       stock: 40,
@@ -505,6 +517,15 @@ async function main() {
   // 4. Seed Coupons
   const couponsData = [
     {
+      code: 'BLOOM10',
+      discountType: 'PERCENTAGE',
+      discountValue: 10,
+      minOrderValue: 999,
+      maxDiscount: 500,
+      usageLimit: 500,
+      isActive: true,
+    },
+    {
       code: 'RITUAL10',
       discountType: 'PERCENTAGE',
       discountValue: 10,
@@ -688,7 +709,7 @@ If an accidental nick ever occurs, stay calm. Pet anxiety mirrors human tension.
       title: 'Emergency First-Response: Minor Grooming Nicks vs. Urgent Veterinary Visits',
       slug: 'minor-grooming-nicks-vs-urgent-veterinary-visits',
       excerpt: 'A comprehensive medical guide for pet parents on triaging home grooming incidents and knowing when emergency clinic care is necessary.',
-      content: `At Paw & Ritual, we advocate for transparent, responsible pet stewardship. While high-quality grooming tools reduce accidents, knowing how to differentiate between minor at-home incidents and veterinary emergencies is vital for every dog guardian.
+      content: `At PetBloom, we advocate for transparent, responsible pet stewardship. While high-quality grooming tools reduce accidents, knowing how to differentiate between minor at-home incidents and veterinary emergencies is vital for every dog guardian.
 
 ### Minor Situations Manageable at Home
 1. **Accidental Quick Nicks:** Blood loss is superficial and easily arrested within seconds using hemostatic styptic powder and continuous gentle pressure.

@@ -1,11 +1,11 @@
-# PAW & RITUAL — The Art of Premium Pet Care
+# PetBloom — The Art of Premium Pet Care
 ### Luxury Pet Grooming & Emergency Kits E-Commerce Platform
 
 ---
 
 ## 🌿 Brand Vision & Purpose
 
-**PAW & RITUAL** is an international luxury pet wellness and apothecary grooming brand inspired by high-end skincare (Aesop, Le Labo, Augustinus Bader). Developed as a premier full-stack e-commerce experience for **"Pet Grooming Emergency Kits"**, it transforms everyday canine maintenance into a serene, bonded, and veterinary-aligned ritual.
+**PetBloom** is an international luxury pet wellness and apothecary grooming brand inspired by high-end skincare (Aesop, Le Labo, Augustinus Bader). Developed as a premier full-stack e-commerce experience for **"Pet Grooming Emergency Kits"**, it transforms everyday canine maintenance into a serene, bonded, and veterinary-aligned ritual.
 
 ### 🎨 Visual & Aesthetic Identity
 - **Palette**: Warm ivory (`#FAF8F5`, `#FAF7F2`), muted sage green (`#5E7060`, `#7A8B7B`), champagne gold detailing (`#D4AF37`, `#C5A059`), and deep charcoal typography (`#1A1A1A`, `#2D2D2D`).
@@ -122,7 +122,8 @@ Visit **http://localhost:5173** in your browser!
 
 | Role | Email | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
-| **Administrator** | `admin@pawandritual.com` | `Admin@PawRitual2024` | Executive Dashboard, Catalog CRUD, Order Tracking, Coupons, Messages |
+| **Administrator** | `admin@petbloom.com` | `Admin@PetBloom2024` | Executive Dashboard, Catalog CRUD, Order Tracking, Coupons, Messages |
+| **Legacy Admin** | `admin@pawandritual.com` | `Admin@PawRitual2024` | Backwards-compatible Admin access |
 | **Client / Customer** | `elena.vance@example.com` | `Password@123` | Storefront, Wishlist, Bag, Checkout, Order History, Addresses |
 
 *Note: On the `/login` page, click the **"Fill Customer Demo"** or **"Fill Admin Portal Demo"** buttons for 1-click test login!*
@@ -152,7 +153,7 @@ Logged-in administrators can access:
 - **Product Management** (`/admin/products`): Add new formulations, edit pricing, update descriptions, manage stock, and upload imagery.
 - **Order Logistics** (`/admin/orders`): Review orders, update status (`PROCESSING`, `SHIPPED`, `DELIVERED`, `CANCELLED`), and enter BlueDart/Delhivery tracking numbers.
 - **Client Directory** (`/admin/customers`): Review customer order counts and lifetime spend.
-- **Coupons Engine** (`/admin/coupons`): Create percentage or fixed discount promo codes (e.g., `RITUAL10`, `EMERGENCY15`).
+- **Coupons Engine** (`/admin/coupons`): Create percentage or fixed discount promo codes (e.g., `BLOOM10`, `RITUAL10`, `EMERGENCY15`).
 - **Inquiries & Subscribers** (`/admin/messages`): Review contact form submissions and newsletter leads.
 
 ---
@@ -162,11 +163,11 @@ Logged-in administrators can access:
 To run directly on MySQL:
 1. Create database:
    ```sql
-   CREATE DATABASE paw_and_ritual CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   CREATE DATABASE petbloom CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
    ```
 2. In `backend/.env`, set:
    ```env
-   DATABASE_URL="mysql://root:yourpassword@localhost:3306/paw_and_ritual"
+   DATABASE_URL="mysql://root:yourpassword@localhost:3306/petbloom"
    ```
 3. Push schema or import SQL:
    ```bash
@@ -188,4 +189,5 @@ node test_workflow.js
 
 ---
 
-© 2024 PAW & RITUAL. Handcrafted with reverence for canine care.
+© 2026 PetBloom. Handcrafted with reverence for canine care.  
+**Created by [workwithkumaraswamy@gmail.com](mailto:workwithkumaraswamy@gmail.com)**

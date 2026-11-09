@@ -60,11 +60,10 @@ export const Navbar = ({ onOpenSearch }) => {
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-ivory-50/95 backdrop-blur-md shadow-sm py-3 border-b border-ivory-300/60'
-          : 'bg-ivory-50/80 backdrop-blur-sm py-4 border-b border-ivory-200'
-      }`}
+      className={`sticky top-0 z-40 transition-all duration-300 ${isScrolled
+        ? 'bg-ivory-50/95 backdrop-blur-md shadow-sm py-3 border-b border-ivory-300/60'
+        : 'bg-ivory-50/80 backdrop-blur-sm py-4 border-b border-ivory-200'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
@@ -81,10 +80,10 @@ export const Navbar = ({ onOpenSearch }) => {
 
           {/* Luxury Brand Logo */}
           <Link to="/" className="flex flex-col items-center group text-center mx-auto lg:mx-0">
-            <span className="font-serif text-2xl sm:text-3xl tracking-[0.2em] font-semibold text-charcoal-800 uppercase group-hover:text-sage-600 transition-colors">
+            <span className="font-serif text-xl sm:text-2xl tracking-[0.12em] md:tracking-[0.16em] font-semibold text-charcoal-800 uppercase group-hover:text-sage-600 transition-colors">
               PetBloom
             </span>
-            <span className="text-[9px] uppercase tracking-[0.35em] text-charcoal-400 font-medium -mt-0.5">
+            <span className="text-[7px] sm:text-[8px] uppercase tracking-[0.18em] sm:tracking-[0.25em] text-charcoal-400 font-medium -mt-0.5">
               The Art of Premium Pet Care
             </span>
           </Link>
@@ -103,11 +102,10 @@ export const Navbar = ({ onOpenSearch }) => {
                   >
                     <Link
                       to={link.path}
-                      className={`text-xs uppercase tracking-[0.16em] font-medium transition-colors flex items-center py-2 ${
-                        isActive || location.pathname.startsWith('/shop')
-                          ? 'text-sage-600 font-semibold border-b-2 border-sage-600'
-                          : 'text-charcoal-600 hover:text-charcoal-900'
-                      }`}
+                      className={`text-xs uppercase tracking-[0.16em] font-medium transition-colors flex items-center py-2 ${isActive || location.pathname.startsWith('/shop')
+                        ? 'text-sage-600 font-semibold border-b-2 border-sage-600'
+                        : 'text-charcoal-600 hover:text-charcoal-900'
+                        }`}
                     >
                       {link.name}
                       <ChevronDown className="w-3 h-3 ml-1 text-charcoal-400" />
@@ -138,11 +136,10 @@ export const Navbar = ({ onOpenSearch }) => {
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`text-xs uppercase tracking-[0.16em] font-medium transition-colors py-2 ${
-                    isActive
-                      ? 'text-sage-600 font-semibold border-b-2 border-sage-600'
-                      : 'text-charcoal-600 hover:text-charcoal-900'
-                  }`}
+                  className={`text-xs uppercase tracking-[0.16em] font-medium transition-colors py-2 ${isActive
+                    ? 'text-sage-600 font-semibold border-b-2 border-sage-600'
+                    : 'text-charcoal-600 hover:text-charcoal-900'
+                    }`}
                 >
                   {link.name}
                 </Link>

@@ -11,7 +11,7 @@ const faqs = [
       },
       {
         q: 'What should I do if I accidentally cut the quick?',
-        a: 'Remain calm. Immediately dip the bleeding claw tip directly into Paw & Ritual Styptic Powder and apply firm, direct pressure for 5-10 seconds without wiping. The ferric subsulfate and potassium alum create an immediate biological hemostatic seal. If bleeding persists beyond 5 minutes, seek immediate veterinary attention.',
+        a: 'Remain calm. Immediately dip the bleeding claw tip directly into PetBloom Styptic Powder and apply firm, direct pressure for 5-10 seconds without wiping. The ferric subsulfate and potassium alum create an immediate biological hemostatic seal. If bleeding persists beyond 5 minutes, seek immediate veterinary attention.',
       },
       {
         q: 'Is the Organic Beeswax Paw Balm safe if licked by my dog?',

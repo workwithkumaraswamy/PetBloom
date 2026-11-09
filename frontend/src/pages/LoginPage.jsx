@@ -40,8 +40,8 @@ export const LoginPage = () => {
   };
 
   const handleQuickDemoAdmin = () => {
-    setEmail('admin@pawandritual.com');
-    setPassword('Admin@PawRitual2024');
+    setEmail('admin@petbloom.com');
+    setPassword('Admin@PetBloom2024');
   };
 
   return (
